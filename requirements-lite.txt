@@ -1,0 +1,38 @@
+# Lightweight requirements for Render free tier (512MB RAM)
+# Core dependencies
+streamlit>=1.50.0
+pandas>=2.3.3
+numpy>=2.3.4
+pillow>=11.3.0
+qrcode>=7.4.2
+pyzbar>=0.1.9
+
+# Database and data
+openpyxl>=3.1.0
+
+# Visualization (load on demand)
+plotly>=6.3.1
+
+# Optional: Only if OpenAI API key is provided
+# openai>=2.6.1
+
+# Optional heavy dependencies - comment out for low-memory deployment
+# scikit-learn>=1.7.2  # ~50MB RAM - can be used instead of tensorflow for some tasks
+# prophet>=1.2.1  # Heavy time series library
+# opencv-python-headless>=4.11.0.86  # Only if receipt scanning needed
+# pytesseract>=0.3.13  # Only if OCR needed
+
+# Lightweight alternatives
+scikit-learn>=1.7.2  # Lighter than tensorflow for basic ML
+scipy>=1.16.2  # Needed by scikit-learn
+
+# PDF generation
+fpdf>=1.7.2
+reportlab>=4.4.4
+
+# Optional analytics
+# statsmodels>=0.14.5  # Only if advanced statistical analysis needed
+# seaborn>=0.13.2  # Only if advanced plotting needed
+# networkx>=3.5  # Only if network analysis needed
+
+
