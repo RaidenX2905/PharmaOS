@@ -26,7 +26,6 @@ wheels/
 ! .streamlit/config.toml
 
 # Database
-*.db
 *.sqlite3
 
 # Reports and temporary files
