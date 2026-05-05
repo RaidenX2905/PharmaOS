@@ -1,4 +1,4 @@
-# Lightweight requirements for Render free tier (512MB RAM)
+# Lightweight requirements for Streamlit Cloud free tier (1GB RAM)
 # Core dependencies
 streamlit>=1.50.0
 pandas>=2.3.3

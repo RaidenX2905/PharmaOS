@@ -1,5 +1,7 @@
 # 💊 AI-Powered Pharmaceutical Inventory Management System
 
+**Repo Description:** Lightweight, AI-powered pharmaceutical inventory system optimized for free-tier deployment. Features Random Forest demand forecasting, anomaly detection, smart reordering, and a built-in AI assistant.
+
 A high-performance, cloud-optimized pharmaceutical inventory system. This application is specifically engineered for fast deployment on free tiers (Streamlit Cloud, Vercel) while maintaining sophisticated AI capabilities like demand forecasting, anomaly detection, and automated stock optimization.
 
 ## 🚀 Key Features
