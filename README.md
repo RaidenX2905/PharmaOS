@@ -39,8 +39,8 @@ A modern, cloud-optimized pharmaceutical resource platform engineered for fast, 
 
 ### 1. Installation
 ```bash
-git clone https://github.com/RaidenX2905/AI-Powered-Pharmaceutical-Inventory-Management-System.git
-cd AI-Powered-Pharmaceutical-Inventory-Management-System
+git clone https://github.com/RaidenX2905/PharmaOS.git
+cd PharmaOS
 pip install -r requirements.txt
 ```
 
@@ -70,7 +70,7 @@ python3 reproduce_benchmarks.py
    git push origin v1.0.1
    ```
 2. In [share.streamlit.io](https://share.streamlit.io), connect your repository:
-   - **Repository**: `RaidenX2905/AI-Powered-Pharmaceutical-Inventory-Management-System` (or `PharmaOS` if renamed)
+   - **Repository**: `RaidenX2905/PharmaOS`
    - **Branch**: `main`
    - **Main file path**: `app.py`
 3. Click **Deploy**. The application runs natively on the 1GB RAM free tier.
