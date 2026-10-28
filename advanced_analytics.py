@@ -6,7 +6,9 @@ import sqlite3
 import warnings
 import os
 
-warnings.filterwarnings("ignore")
+# Selective warning filter for known benign convergence warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", message=".*ConvergenceWarning.*")
 
 # Check for heavy features flag
 DISABLE_HEAVY = os.environ.get("DISABLE_HEAVY_FEATURES", "false").lower() == "true"

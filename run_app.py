@@ -21,59 +21,57 @@ def is_port_in_use(port):
         return s.connect_ex(('localhost', port)) == 0
 
 def run():
-    port = 8501
+    port = int(os.environ.get("PORT", "8501"))
     
-    # 1. Kill existing process on port 8501 if any (professional cleanup)
+    # 1. Check if port is in use
     if is_port_in_use(port):
-        print(f"[*] Port {port} is in use. Cleaning up...")
-        if sys.platform == 'win32':
-            subprocess.run(f"for /f \"tokens=5\" %a in ('netstat -aon ^| findstr :{port}') do taskkill /f /pid %a", shell=True, stderr=subprocess.DEVNULL)
-        time.sleep(1)
+        print(f"[!] Warning: Port {port} is currently in use. Please select another port or free it gracefully.")
+        # If port 8501 is busy, try next available port
+        for candidate in range(8502, 8510):
+            if not is_port_in_use(candidate):
+                port = candidate
+                print(f"[*] Switched to available port {port}")
+                break
 
     # 2. Start Streamlit server
-    print("[*] Starting AI Pharma Management System (HTTPS)...")
+    use_https = os.path.exists("cert.pem") and os.path.exists("key.pem")
+    protocol = "https" if use_https else "http"
+    print(f"[*] Starting PharmaOS ({protocol.upper()})...")
+    
     cmd = [
         sys.executable, "-m", "streamlit", "run", "app.py",
         "--server.port", str(port),
-        "--server.sslCertFile", "cert.pem",
-        "--server.sslKeyFile", "key.pem",
         "--server.headless", "true"
     ]
+    if use_https:
+        cmd.extend([
+            "--server.sslCertFile", "cert.pem",
+            "--server.sslKeyFile", "key.pem"
+        ])
     
     # Run in background
-    server_proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    server_proc = subprocess.Popen(cmd)
     
     # 3. Wait for server to start
     print("[*] Waiting for server to initialize...")
-    for _ in range(10):
+    for _ in range(15):
         if is_port_in_use(port):
             break
         time.sleep(1)
     
-    # 4. Launch Brave
-    brave_path = get_brave_path()
-    url = f"https://localhost:{port}"
-    
-    if brave_path:
-        print(f"[*] Launching Brave Browser with 0 security constraints...")
-        # Security flags: ignore-certificate-errors and allow-insecure-localhost
-        brave_cmd = [
-            brave_path,
-            "--ignore-certificate-errors",
-            "--allow-insecure-localhost",
-            url
-        ]
-        subprocess.Popen(brave_cmd)
-    else:
-        print("[!] Brave Browser not found. Opening default browser...")
-        import webbrowser
-        webbrowser.open(url)
-
+    url = f"{protocol}://localhost:{port}"
     print(f"[+] System is live at {url}")
-    print("[*] Press Ctrl+C to stop the server (optional, or just close the terminal).")
+    
+    # 4. Launch default browser safely
+    import webbrowser
+    try:
+        webbrowser.open(url)
+    except Exception as e:
+        print(f"[!] Could not launch browser automatically: {e}")
+
+    print("[*] Press Ctrl+C to stop the server.")
     
     try:
-        # Keep the script running to manage the process if needed, or just exit
         server_proc.wait()
     except KeyboardInterrupt:
         print("\n[*] Shutting down...")

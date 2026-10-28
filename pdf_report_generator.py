@@ -18,8 +18,8 @@ class PDFReportGenerator(FPDF):
     def header(self):
         """Page header"""
         self.set_font("Arial", "B", 16)
-        self.set_text_color(102, 126, 234)
-        self.cell(0, 10, "AI Pharmaceutical Inventory Management System", 0, 1, "C")
+        self.set_text_color(201, 100, 66)
+        self.cell(0, 10, "PharmaOS", 0, 1, "C")
         self.set_font("Arial", "I", 10)
         self.set_text_color(100, 100, 100)
         self.cell(
@@ -133,7 +133,7 @@ class InventoryReportGenerator:
         pdf.cell(0, 15, "Comprehensive Inventory Report", 0, 1, "C")
         pdf.set_font("Arial", "I", 12)
         pdf.set_text_color(100, 100, 100)
-        pdf.cell(0, 10, "AI-Powered Pharmaceutical Inventory Management", 0, 1, "C")
+        pdf.cell(0, 10, "PharmaOS", 0, 1, "C")
 
         # Executive Summary
         pdf.add_page()
