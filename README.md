@@ -7,6 +7,9 @@ A modern, cloud-optimized pharmaceutical resource platform engineered for fast, 
 [![Tests](https://img.shields.io/badge/tests-12%20passed-success)](tests/)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
 [![Theme](https://img.shields.io/badge/theme-Claude%20Amber-orange)](https://21st.dev/@serafimcloud/themes/claude-amber)
+[![Live Demo](https://img.shields.io/badge/Streamlit%20Cloud-Live-brightgreen)](https://pharmaos.streamlit.app/)
+
+**Live Application:** [https://pharmaos.streamlit.app/](https://pharmaos.streamlit.app/)
 
 ---
 
