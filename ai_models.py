@@ -4,7 +4,9 @@ from datetime import datetime, timedelta
 import warnings
 import streamlit as st
 
-warnings.filterwarnings("ignore")
+# Selective warning filter for known benign warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", message=".*ConvergenceWarning.*")
 
 
 class SmartReordering:

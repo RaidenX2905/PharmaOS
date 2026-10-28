@@ -13,9 +13,13 @@ class DatabaseManager:
         self.init_database()
 
     def get_connection(self):
-        """Get database connection with row factory for easier data access"""
-        conn = sqlite3.connect(self.db_path)
+        """Get database connection with WAL mode, busy timeout, and foreign keys enabled."""
+        conn = sqlite3.connect(self.db_path, timeout=10.0)
         conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA foreign_keys = ON")
+        conn.execute("PRAGMA journal_mode = WAL")
+        conn.execute("PRAGMA synchronous = NORMAL")
+        conn.execute("PRAGMA busy_timeout = 10000")
         return conn
 
     def init_database(self):
@@ -748,50 +752,46 @@ class DatabaseManager:
 
     # Dashboard methods
     @st.cache_data
-    def get_total_inventory_count(_self):
-        """Get total number of inventory items"""
+    def get_dashboard_summary(_self):
+        """Single-query snapshot of key inventory metrics for minimal round-trip latency"""
         conn = _self.get_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) FROM inventory")
-        count = cursor.fetchone()[0]
+        cursor.execute("""
+            SELECT 
+                COUNT(*) as total,
+                SUM(CASE WHEN current_stock <= minimum_stock THEN 1 ELSE 0 END) as low,
+                SUM(CASE WHEN expiry_date <= date('now', '+30 days') THEN 1 ELSE 0 END) as expiring,
+                COALESCE(SUM(current_stock * unit_price), 0.0) as value
+            FROM inventory
+        """)
+        row = cursor.fetchone()
         conn.close()
-        return count
+        return {
+            "total": row[0] or 0,
+            "low": row[1] or 0,
+            "expiring": row[2] or 0,
+            "value": float(row[3] or 0.0)
+        }
+
+    @st.cache_data
+    def get_total_inventory_count(_self):
+        """Get total number of inventory items"""
+        return _self.get_dashboard_summary()["total"]
 
     @st.cache_data
     def get_low_stock_count(_self):
         """Get count of items below minimum stock level"""
-        conn = _self.get_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            "SELECT COUNT(*) FROM inventory WHERE current_stock <= minimum_stock"
-        )
-        count = cursor.fetchone()[0]
-        conn.close()
-        return count
+        return _self.get_dashboard_summary()["low"]
 
     @st.cache_data
     def get_expiring_soon_count(_self):
         """Get count of items expiring within 30 days"""
-        conn = _self.get_connection()
-        cursor = conn.cursor()
-        expiry_date = datetime.now() + timedelta(days=30)
-        cursor.execute(
-            "SELECT COUNT(*) FROM inventory WHERE expiry_date <= ?",
-            (expiry_date.date(),),
-        )
-        count = cursor.fetchone()[0]
-        conn.close()
-        return count
+        return _self.get_dashboard_summary()["expiring"]
 
     @st.cache_data
     def get_total_inventory_value(_self):
         """Get total value of all inventory items"""
-        conn = _self.get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT SUM(current_stock * unit_price) FROM inventory")
-        result = cursor.fetchone()[0]
-        conn.close()
-        return result or 0.0
+        return _self.get_dashboard_summary()["value"]
 
     @st.cache_data
     def get_inventory_by_category(_self):

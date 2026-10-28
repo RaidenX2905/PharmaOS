@@ -5,25 +5,22 @@ from inventory_forecasting import InventoryForecaster
 
 def regression_lstm_analysis_page(db):
     """Page for regression and LSTM analysis"""
-    st.title("📈 Regression & LSTM Stock Analysis")
-    
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                padding: 1.5rem; border-radius: 10px; color: white; margin-bottom: 2rem;">
-        <h3>🔬 Advanced Inventory Forecasting & Regression Analysis</h3>
-        <p>Compare multiple regression models and forecast future stock with LSTM neural networks</p>
+    <div style="background: #ffffff; border: 1px solid #dad9d4; border-radius: 6px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 600; color: #3d3929; margin: 0; letter-spacing: -0.02em;">Demand Forecasting & Regression Analysis</h2>
+        <p style="font-size: 0.875rem; color: #83827d; margin-top: 0.25rem; margin-bottom: 0;">Empirical validation across statistical baselines and sequential ensemble forecasters</p>
     </div>
     """, unsafe_allow_html=True)
     
     # Check if inventory was updated and show notification
     if 'last_inventory_update' in st.session_state:
         if 'regression_results' not in st.session_state and 'lstm_results' not in st.session_state:
-            st.info("📊 **Inventory data has been updated!** Click the buttons below to generate fresh forecasts based on the latest data.")
+            st.info("Inventory dataset has been updated. Recalculate models to refresh metrics.")
     
     forecaster = InventoryForecaster(db)
     
     # Tabs for different analyses
-    tab1, tab2 = st.tabs(["📊 Regression Analysis", "🧠 LSTM Forecasting"])
+    tab1, tab2 = st.tabs(["Regression Benchmarks", "Sequential Sequence Forecast"])
     
     with tab1:
         st.subheader("Multi-Model Regression Comparison")
@@ -92,28 +89,24 @@ def regression_lstm_analysis_page(db):
                 best_rmse = results[best_model]['rmse']
                 
                 if best_r2 > 0.8:
-                    quality = "Excellent"
-                    color = "green"
+                    quality = "Optimal Fit"
+                    color = "#2e7d32"
                 elif best_r2 > 0.6:
-                    quality = "Good"
-                    color = "blue"
+                    quality = "Acceptable"
+                    color = "#c96442"
                 elif best_r2 > 0.4:
-                    quality = "Fair"
-                    color = "orange"
+                    quality = "Moderate"
+                    color = "#b85434"
                 else:
-                    quality = "Poor"
-                    color = "red"
+                    quality = "Low Fit"
+                    color = "#c53030"
                 
                 st.markdown(f"""
-                <div style="background-color: rgba(0, 123, 255, 0.1); padding: 1rem; border-left: 4px solid {color}; border-radius: 5px;">
-                    <h4>🎯 Recommended Model: <span style="color: {color};">{best_model.upper()}</span></h4>
-                    <p><strong>Model Quality:</strong> {quality}</p>
-                    <ul>
-                        <li><strong>R² Score:</strong> {best_r2:.4f} (closer to 1.0 is better)</li>
-                        <li><strong>Mean Absolute Error:</strong> {best_mae:.2f} units</li>
-                        <li><strong>Root Mean Squared Error:</strong> {best_rmse:.2f} units</li>
-                    </ul>
-                    <p><em>This model shows the best performance for predicting stock levels based on historical data.</em></p>
+                <div style="background-color: #ffffff; border: 1px solid #dad9d4; border-left: 3px solid {color}; padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                    <div style="font-weight: 600; font-size: 0.95rem; color: #3d3929;">Recommended Model: {best_model.upper()} ({quality})</div>
+                    <div style="font-size: 0.85rem; color: #83827d; margin-top: 0.35rem;">
+                        R² Score: <strong>{best_r2:.4f}</strong> | MAE: <strong>{best_mae:.2f}</strong> | RMSE: <strong>{best_rmse:.2f}</strong>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
             except Exception as e:
@@ -224,27 +217,24 @@ def regression_lstm_analysis_page(db):
                 st.markdown("### 💡 Insights & Recommendations")
                 
                 if results['mape'] < 10:
-                    accuracy = "Excellent"
-                    color = "green"
+                    accuracy = "High Precision"
+                    color = "#2e7d32"
                 elif results['mape'] < 20:
-                    accuracy = "Good"
-                    color = "blue"
+                    accuracy = "Acceptable"
+                    color = "#c96442"
                 elif results['mape'] < 30:
-                    accuracy = "Fair"
-                    color = "orange"
+                    accuracy = "Moderate"
+                    color = "#b85434"
                 else:
-                    accuracy = "Poor"
-                    color = "red"
+                    accuracy = "Low Precision"
+                    color = "#c53030"
                 
                 st.markdown(f"""
-                <div style="background-color: rgba(255, 193, 7, 0.1); padding: 1rem; border-left: 4px solid {color}; border-radius: 5px;">
-                    <h4>🎯 Forecast Accuracy: <span style="color: {color};">{accuracy}</span></h4>
-                    <ul>
-                        <li>Expected average daily consumption: <strong>{avg_forecast:.1f} units</strong></li>
-                        <li>Forecast accuracy (MAPE): <strong>{results['mape']:.2f}%</strong></li>
-                        <li>Model can predict consumption with MAE of <strong>±{results['mae']:.2f} units</strong></li>
-                    </ul>
-                    <p><em>Use these forecasts to optimize inventory levels and prevent stockouts.</em></p>
+                <div style="background-color: #ffffff; border: 1px solid #dad9d4; border-left: 3px solid {color}; padding: 1rem; border-radius: 6px; margin: 1rem 0;">
+                    <div style="font-weight: 600; font-size: 0.95rem; color: #3d3929;">Evaluation Summary: {accuracy}</div>
+                    <div style="font-size: 0.85rem; color: #83827d; margin-top: 0.35rem;">
+                        Projected Average Demand: <strong>{avg_forecast:.1f} units/day</strong> | WAPE/MAPE: <strong>{results['mape']:.2f}%</strong> | Test MAE: <strong>±{results['mae']:.2f} units</strong>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
             except Exception as e:

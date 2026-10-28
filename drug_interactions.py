@@ -6,6 +6,17 @@ from difflib import SequenceMatcher
 
 
 class DrugInteractionChecker:
+    """Clinical prototype interaction checker.
+
+    DISCLAIMER: For demonstration and decision-support research only.
+    Contains a limited curated knowledge base. Absence of a reported
+    interaction DOES NOT guarantee combination safety. Professional
+    pharmacist judgment required.
+    """
+
+    KNOWLEDGE_BASE_VERSION = "0.2.0-curated-demo"
+    DATA_SOURCE = "Curated Reference Pharmacopoeia (Sample subset)"
+
     def __init__(self):
         self.interaction_cache = {}
         self.substitution_cache = {}

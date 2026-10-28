@@ -20,113 +20,216 @@ from utils import (
 
 # Page configuration
 st.set_page_config(
-    page_title="AI Pharmaceutical Inventory Management",
+    page_title="PharmaOS",
     page_icon="💊",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# Optimized lightweight CSS - minimal animations for faster rendering
+# Claude Amber Design System Tokens
 st.markdown(
     """
 <style>
-    /* Simplified header - solid color instead of gradients */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+    :root {
+        --claude-bg: #faf9f5;
+        --claude-surface: #ffffff;
+        --claude-sidebar: #f5f3ec;
+        --claude-border: #dad9d4;
+        --claude-border-subtle: #eae8e1;
+        --claude-text: #3d3929;
+        --claude-text-muted: #83827d;
+        --claude-amber: #c96442;
+        --claude-amber-hover: #b85434;
+        --claude-amber-subtle: #fbeee8;
+        --claude-radius: 6px;
+    }
+
+    html, body, [class*="css"], .stApp {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        background-color: var(--claude-bg) !important;
+        color: var(--claude-text) !important;
+    }
+
+    /* Fluid GPU-accelerated page transitions & cards */
+    @keyframes fadeInPage {
+        from {
+            opacity: 0;
+            transform: translate3d(0, 4px, 0);
+        }
+        to {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    .main .block-container {
+        animation: fadeInPage 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        will-change: opacity, transform;
+    }
+
+    /* Claude Amber Main Header Banner */
     .main-header {
-        background: #667eea;
-        padding: 1.5rem;
-        border-radius: 10px;
-        color: white;
-        text-align: center;
+        background-color: var(--claude-surface);
+        border: 1px solid var(--claude-border);
+        border-radius: var(--claude-radius);
+        padding: 1.25rem 1.5rem;
         margin-bottom: 1.5rem;
+        box-shadow: 0 1px 2px rgba(61, 57, 41, 0.04);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .main-header:hover {
+        border-color: #c4c2ba;
+        box-shadow: 0 2px 5px rgba(61, 57, 41, 0.06);
+    }
+    .main-header h1 {
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--claude-text);
+        margin: 0;
+        letter-spacing: -0.02em;
+    }
+    .main-header p {
+        font-size: 0.875rem;
+        color: var(--claude-text-muted);
+        margin-top: 0.25rem;
+        margin-bottom: 0;
     }
 
-    /* Simplified metric cards - solid colors, minimal effects */
+    /* Claude Amber Metric Cards */
     .metric-card {
-        background: #667eea;
-        padding: 1.2rem;
-        border-radius: 10px;
-        color: white;
-        text-align: center;
-        margin: 0.5rem 0;
-        transition: transform 0.2s;
+        background-color: var(--claude-surface);
+        border: 1px solid var(--claude-border);
+        border-radius: var(--claude-radius);
+        padding: 1.1rem 1.25rem;
+        margin: 0.25rem 0;
+        text-align: left;
+        box-shadow: 0 1px 2px rgba(61, 57, 41, 0.03);
+        transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease, border-color 0.18s ease;
+        will-change: transform, box-shadow;
     }
-    
     .metric-card:hover {
-        transform: translateY(-2px);
+        transform: translate3d(0, -2px, 0);
+        border-color: #c4c2ba;
+        box-shadow: 0 4px 10px rgba(61, 57, 41, 0.06);
     }
-
-    /* Mobile-specific adjustments */
-    @media (max-width: 640px) {
-        .main-header {
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        .main-header h1 {
-            font-size: 1.5rem;
-        }
-        .metric-card {
-            padding: 0.8rem;
-        }
-        .metric-card h3 {
-            font-size: 1rem;
-        }
-        .metric-card h2 {
-            font-size: 1.4rem;
-        }
+    .metric-card h3 {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+        color: var(--claude-text-muted);
+        margin: 0 0 0.4rem 0;
     }
-
-    /* Simplified alert cards */
-    .alert-card, .success-card, .warning-card, .error-card {
-        padding: 1rem;
-        border-radius: 8px;
-        margin: 0.5rem 0;
-        border-left: 4px solid;
-    }
-    
-    .alert-card { background: #f8f9fa; border-left-color: #007bff; }
-    .success-card { background: #d4edda; border-left-color: #28a745; }
-    .warning-card { background: #fff3cd; border-left-color: #ffc107; }
-    .error-card { background: #f8d7da; border-left-color: #dc3545; }
-
-    /* Simplified buttons */
-    .stButton > button {
-        background: #667eea;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 0.6rem 1.2rem;
-        font-weight: 500;
-        width: 100%;
-    }
-
-    /* Simplified inputs */
-    .stTextInput > div > div > input,
-    .stSelectbox > div > div > select,
-    .stNumberInput > div > div > input {
-        border-radius: 6px;
-        border: 1px solid #ddd;
-    }
-    
-    /* Ensure charts are responsive */
-    .chart-container {
-        width: 100%;
-        overflow-x: auto;
-    }
-    
-    img {
-        max-width: 100%;
-        height: auto;
-    }
-    
     .metric-card h2 {
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        font-size: 1.8rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--claude-text);
+        margin: 0;
+        letter-spacing: -0.02em;
     }
-    
-    /* Better table alignment on mobile */
-    .stDataFrame {
-        width: 100% !important;
+
+    /* Claude Amber Notifications & Alerts */
+    .alert-card, .success-card, .warning-card, .error-card {
+        padding: 0.85rem 1.15rem;
+        border-radius: var(--claude-radius);
+        margin: 0.5rem 0;
+        font-size: 0.875rem;
+        line-height: 1.45;
+        border: 1px solid var(--claude-border);
+        transition: transform 0.15s ease;
+    }
+    .alert-card:hover, .success-card:hover, .warning-card:hover, .error-card:hover {
+        transform: translate3d(2px, 0, 0);
+    }
+    .alert-card {
+        background: #fdfcf9;
+        border-left: 3px solid #83827d;
+        color: var(--claude-text);
+    }
+    .success-card {
+        background: #f4f8f4;
+        border-color: #d6e6d6;
+        border-left: 3px solid #2e7d32;
+        color: #1b4d20;
+    }
+    .warning-card {
+        background: #fdfaf2;
+        border-color: #faeacc;
+        border-left: 3px solid #c96442;
+        color: #7c3a21;
+    }
+    .error-card {
+        background: #fcf4f3;
+        border-color: #f7d5d2;
+        border-left: 3px solid #c53030;
+        color: #7b1c1c;
+    }
+
+    /* Claude Amber Form Buttons */
+    .stButton > button {
+        background-color: var(--claude-amber) !important;
+        color: #ffffff !important;
+        border: 1px solid var(--claude-amber) !important;
+        border-radius: var(--claude-radius) !important;
+        padding: 0.5rem 1.1rem !important;
+        font-size: 0.875rem !important;
+        font-weight: 500 !important;
+        box-shadow: 0 1px 2px rgba(201, 100, 66, 0.15) !important;
+        transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease !important;
+    }
+    .stButton > button:hover {
+        background-color: var(--claude-amber-hover) !important;
+        border-color: var(--claude-amber-hover) !important;
+        color: #ffffff !important;
+        transform: translate3d(0, -1px, 0) !important;
+        box-shadow: 0 3px 6px rgba(201, 100, 66, 0.22) !important;
+    }
+    .stButton > button:active {
+        transform: translate3d(0, 1px, 0) !important;
+        box-shadow: 0 1px 2px rgba(201, 100, 66, 0.15) !important;
+    }
+
+    /* Inputs and Selects focus animations */
+    .stTextInput > div > div > input,
+    .stSelectbox > div > div > div,
+    .stNumberInput > div > div > input {
+        background-color: var(--claude-surface) !important;
+        border: 1px solid var(--claude-border) !important;
+        border-radius: var(--claude-radius) !important;
+        color: var(--claude-text) !important;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+    }
+    .stTextInput > div > div > input:focus,
+    .stSelectbox > div > div > div:focus,
+    .stNumberInput > div > div > input:focus {
+        border-color: var(--claude-amber) !important;
+        box-shadow: 0 0 0 2px var(--claude-amber-subtle) !important;
+    }
+
+    /* Minimalist Chart Containers */
+    .chart-container {
+        background: var(--claude-surface);
+        border: 1px solid var(--claude-border);
+        border-radius: var(--claude-radius);
+        padding: 1.1rem;
+        margin: 0.5rem 0;
+        box-shadow: 0 1px 2px rgba(61, 57, 41, 0.02);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .chart-container:hover {
+        border-color: #c4c2ba;
+        box-shadow: 0 3px 8px rgba(61, 57, 41, 0.05);
+    }
+
+    /* Accessibility: Respect Reduced Motion Preferences */
+    @media (prefers-reduced-motion: reduce) {
+        *, .main .block-container, .metric-card, .stButton > button, .chart-container {
+            animation: none !important;
+            transition: none !important;
+            transform: none !important;
+        }
     }
 </style>
 """,
@@ -239,12 +342,15 @@ def show_success_message(message):
     )
 
 
-# Sidebar navigation with enhanced styling
+# Sidebar header styled in Claude Amber language
 st.sidebar.markdown(
     """
-<div style="text-align: center; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px; margin-bottom: 2rem;">
-    <h2 style="color: white; margin: 0;">🏥 AI Pharma Manager</h2>
-    <p style="color: white; margin: 0; font-size: 0.9rem;">Smart Inventory Management</p>
+<div style="padding: 0.85rem 0.5rem 1.15rem 0.5rem; border-bottom: 1px solid #dad9d4; margin-bottom: 1.25rem;">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <div style="width: 10px; height: 10px; border-radius: 50%; background-color: #c96442;"></div>
+        <div style="font-weight: 700; font-size: 1.05rem; color: #3d3929; letter-spacing: -0.01em;">PharmaOS</div>
+    </div>
+    <div style="font-size: 0.75rem; color: #83827d; margin-top: 0.25rem;">Pharmaceutical Resource Operations</div>
 </div>
 """,
     unsafe_allow_html=True,
@@ -327,19 +433,33 @@ menu_items.extend(["Smart Reordering", "Expiry Management"])
 
 menu_items.append("Settings")
 
-# Safe query params reading for Streamlit >= 1.30
-query_params = st.query_params
-default_index = 0
-if "page" in query_params:
-    requested_page = query_params["page"]
-    if requested_page in menu_items:
-        default_index = menu_items.index(requested_page)
+# Robust session-state navigation with query param synchronization
+if "current_nav_page" not in st.session_state:
+    param_page = st.query_params.get("page")
+    if param_page and param_page in menu_items:
+        st.session_state["current_nav_page"] = param_page
+    else:
+        st.session_state["current_nav_page"] = menu_items[0]
 
-page = st.sidebar.selectbox("📋 Navigation Menu", menu_items, index=default_index)
+def _on_nav_change():
+    chosen = st.session_state.get("nav_selectbox")
+    if chosen:
+        st.session_state["current_nav_page"] = chosen
+        if st.query_params.get("page") != chosen:
+            st.query_params["page"] = chosen
 
-# Update query param when page changes
-if query_params.get("page") != page:
-    st.query_params["page"] = page
+curr_index = menu_items.index(st.session_state["current_nav_page"]) if st.session_state["current_nav_page"] in menu_items else 0
+
+page = st.sidebar.selectbox(
+    "Navigation Menu",
+    menu_items,
+    index=curr_index,
+    key="nav_selectbox",
+    on_change=_on_nav_change
+)
+
+# Keep current_nav_page in sync
+st.session_state["current_nav_page"] = page
 
 # Sidebar - Quick Actions
 st.sidebar.markdown("---")
@@ -353,21 +473,27 @@ st.sidebar.markdown("---")
 
 
 def dashboard_page():
-    # Enhanced header
+    # Centered minimal Claude Amber header
     st.markdown(
         """
-    <div class="main-header">
-        <h1>📊 AI Pharmaceutical Inventory Dashboard</h1>
-        <p>Real-time insights and smart analytics for your pharmacy</p>
+    <div style="text-align: center; max-width: 680px; margin: 0 auto 2.25rem auto; padding: 1.5rem 1rem 0.5rem 1rem;">
+        <div style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.25rem 0.65rem; background: #f5f3ec; border: 1px solid #dad9d4; border-radius: 20px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #c96442; margin-bottom: 0.85rem;">
+            <span>System Operations</span>
+        </div>
+        <h1 style="font-size: 2.1rem; font-weight: 700; color: #3d3929; letter-spacing: -0.03em; margin: 0; line-height: 1.2;">
+            Executive Dashboard
+        </h1>
+        <p style="font-size: 0.95rem; color: #83827d; margin: 0.6rem 0 0 0; line-height: 1.5;">
+            Operational summary, critical inventory balances, and automated alerts
+        </p>
     </div>
     """,
         unsafe_allow_html=True,
     )
 
-    # Add a quick stats row
-    st.markdown("### 📈 Quick Overview")
+    # Key metrics row
+    st.markdown("##### Overview")
 
-    # Key metrics with enhanced styling
     col1, col2, col3, col4 = st.columns(4)
 
     metrics = get_dashboard_metrics(_db)
@@ -379,29 +505,31 @@ def dashboard_page():
     with col1:
         st.markdown(
             f"""
-        <div class="metric-card">
-            <h3>📦 Total Items</h3>
-            <h2>{total_items}</h2>
+        <div class="metric-card" style="border-top: 3px solid #2e7d32;">
+            <h3>Total Catalog Items</h3>
+            <h2 style="color: #2e7d32;">{total_items:,}</h2>
         </div>
         """,
             unsafe_allow_html=True,
         )
     with col2:
+        low_color = "#c53030" if low_stock_items > 0 else "#2e7d32"
         st.markdown(
             f"""
-        <div class="metric-card">
-            <h3>⚠️ Low Stock Items</h3>
-            <h2>{low_stock_items}</h2>
+        <div class="metric-card" style="border-top: 3px solid {low_color};">
+            <h3>Low Stock</h3>
+            <h2 style="color: {low_color};">{low_stock_items:,}</h2>
         </div>
         """,
             unsafe_allow_html=True,
         )
     with col3:
+        exp_color = "#c96442" if expiring_soon > 0 else "#2e7d32"
         st.markdown(
             f"""
-        <div class="metric-card">
-            <h3>⏰ Expiring Soon</h3>
-            <h2>{expiring_soon}</h2>
+        <div class="metric-card" style="border-top: 3px solid {exp_color};">
+            <h3>Expiring (30d)</h3>
+            <h2 style="color: {exp_color};">{expiring_soon:,}</h2>
         </div>
         """,
             unsafe_allow_html=True,
@@ -409,16 +537,16 @@ def dashboard_page():
     with col4:
         st.markdown(
             f"""
-        <div class="metric-card">
-            <h3>💰 Total Value</h3>
-            <h2>{format_dual_currency(total_value, 0)}</h2>
+        <div class="metric-card" style="border-top: 3px solid #83827d;">
+            <h3>Total Inventory Valuation</h3>
+            <h2 style="color: #3d3929;">{format_dual_currency(total_value, 0)}</h2>
         </div>
         """,
             unsafe_allow_html=True,
         )
 
-    # Enhanced alerts section
-    st.markdown("### 🚨 Smart Alerts & Notifications")
+    # Alerts section
+    st.markdown("##### Operational Alerts")
     alerts = generate_alerts(_db)
     if alerts:
         for alert in alerts:
@@ -426,7 +554,7 @@ def dashboard_page():
                 st.markdown(
                     f"""
                 <div class="error-card">
-                    <strong>🚨 Critical Alert:</strong> {alert["message"]}
+                    <strong>Critical:</strong> {alert["message"]}
                 </div>
                 """,
                     unsafe_allow_html=True,
@@ -435,7 +563,7 @@ def dashboard_page():
                 st.markdown(
                     f"""
                 <div class="warning-card">
-                    <strong>⚠️ Warning:</strong> {alert["message"]}
+                    <strong>Warning:</strong> {alert["message"]}
                 </div>
                 """,
                     unsafe_allow_html=True,
@@ -444,7 +572,7 @@ def dashboard_page():
                 st.markdown(
                     f"""
                 <div class="alert-card">
-                    <strong>ℹ️ Info:</strong> {alert["message"]}
+                    <strong>Notice:</strong> {alert["message"]}
                 </div>
                 """,
                     unsafe_allow_html=True,
@@ -453,7 +581,7 @@ def dashboard_page():
         st.markdown(
             """
         <div class="success-card">
-            <strong>✅ All Good!</strong> No alerts at this time. Your inventory is well-managed.
+            <strong>Optimal:</strong> All stock levels and expiry profiles within expected parameters.
         </div>
         """,
             unsafe_allow_html=True,
@@ -727,14 +855,14 @@ def inventory_management_page():
         )
 
         if not inventory_data.empty:
-            # Add color coding for stock levels
+            # Semantic Claude Amber color coding for stock levels
             def color_stock_level(val):
                 if val <= 10:
-                    return "background-color: #ffcccc"  # Red for low stock
+                    return "background-color: #fcf4f3; color: #c53030; font-weight: 600;"  # Red for critical/low stock
                 elif val <= 50:
-                    return "background-color: #fff3cd"  # Yellow for medium stock
+                    return "background-color: #fdfaf2; color: #c96442; font-weight: 500;"  # Amber for medium/caution stock
                 else:
-                    return "background-color: #d4edda"  # Green for good stock
+                    return "background-color: #f4f8f4; color: #2e7d32;"  # Green for healthy stock
 
             styled_df = inventory_data.style.map(
                 color_stock_level, subset=["current_stock"]
@@ -3395,6 +3523,6 @@ elif page == "Settings":
 
 # Footer
 st.sidebar.markdown("---")
-st.sidebar.markdown("**AI Pharmaceutical Inventory Management System**")
+st.sidebar.markdown("**PharmaOS**")
 st.sidebar.markdown("Version 1.0.0")
-st.sidebar.markdown("© 2025 AI Pharma Systems")
+st.sidebar.markdown("© 2026 PharmaOS")
