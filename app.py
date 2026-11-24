@@ -21,7 +21,7 @@ from utils import (
 # Page configuration
 st.set_page_config(
     page_title="PharmaOS",
-    page_icon="💊",
+    page_icon="static/favicon.png",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -346,11 +346,30 @@ def show_success_message(message):
 st.sidebar.markdown(
     """
 <div style="padding: 0.85rem 0.5rem 1.15rem 0.5rem; border-bottom: 1px solid #dad9d4; margin-bottom: 1.25rem;">
-    <div style="display: flex; align-items: center; gap: 0.5rem;">
-        <div style="width: 10px; height: 10px; border-radius: 50%; background-color: #c96442;"></div>
-        <div style="font-weight: 700; font-size: 1.05rem; color: #3d3929; letter-spacing: -0.01em;">PharmaOS</div>
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+        <div style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 512 512" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="sbTGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#D97A52" />
+                        <stop offset="100%" stop-color="#C66B45" />
+                    </linearGradient>
+                    <linearGradient id="sbAGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%" stop-color="#C66B45" />
+                        <stop offset="100%" stop-color="#DDA56A" />
+                    </linearGradient>
+                </defs>
+                <rect x="136" y="112" width="60" height="288" rx="30" fill="url(#sbTGrad)" />
+                <path d="M 166 112 L 296 112 C 346 112 376 142 376 192 C 376 242 346 272 296 272 L 166 272 Z M 196 162 L 296 162 C 316 162 326 172 326 192 C 326 212 316 222 296 222 L 196 222 Z" fill="#292824" fill-rule="evenodd" />
+                <rect x="236" y="348" width="52" height="52" rx="16" fill="#DDA56A" opacity="0.45" />
+                <rect x="300" y="308" width="52" height="92" rx="16" fill="url(#sbAGrad)" />
+            </svg>
+        </div>
+        <div>
+            <div style="font-weight: 700; font-size: 1.15rem; color: #3d3929; letter-spacing: -0.01em; line-height: 1.2;">PharmaOS</div>
+            <div style="font-size: 0.72rem; color: #83827d; letter-spacing: 0.02em;">Pharmaceutical Resource Operations</div>
+        </div>
     </div>
-    <div style="font-size: 0.75rem; color: #83827d; margin-top: 0.25rem;">Pharmaceutical Resource Operations</div>
 </div>
 """,
     unsafe_allow_html=True,
@@ -360,7 +379,7 @@ st.sidebar.markdown(
 st.sidebar.markdown(
     """
 <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-    <p style="margin: 0; font-size: 0.9rem; color: #666;">👋 Welcome to your AI-powered pharmaceutical inventory management system!</p>
+    <p style="margin: 0; font-size: 0.9rem; color: #666;">Welcome to your AI-powered pharmaceutical inventory management system!</p>
 </div>
 """,
     unsafe_allow_html=True,
