@@ -49,3 +49,5 @@ pytest tests/ -v
 ## License
 
 MIT License
+
+<!-- pharmaos-v1 -->
