@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/pharmaos-mark-parchment-512.png" alt="PharmaOS Brand Mark" width="128" height="128">
+  <img src="static/pharmaos-mark-parchment-512.png" alt="PharmaOS Brand Mark" width="128" height="128">
 </p>
 
 <div align="center">
