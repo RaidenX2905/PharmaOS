@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="terracottaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D97A52" />
+      <stop offset="100%" stop-color="#C66B45" />
+    </linearGradient>
+    <linearGradient id="amberGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#C66B45" />
+      <stop offset="100%" stop-color="#DDA56A" />
+    </linearGradient>
+  </defs>
+
+  <!-- Parchment Canvas -->
+  <rect width="512" height="512" rx="112" fill="#FAF9F5" />
+  <rect width="508" height="508" x="2" y="2" rx="110" fill="none" stroke="#E8E3D9" stroke-width="2" />
+
+  <!-- The Intelligent Pillar Emblem -->
+  <!-- Left Pillar / Stem of 'P' (Solid terracotta vertical monolith) -->
+  <rect x="136" y="112" width="60" height="288" rx="30" fill="url(#terracottaGrad)" />
+
+  <!-- Upper Intelligent Loop of 'P' (Capsular stadium arch intersecting with central pillar) -->
+  <path d="M 166 112
+           L 296 112
+           C 346 112 376 142 376 192
+           C 376 242 346 272 296 272
+           L 166 272 Z"
+        fill="#292824" />
+
+  <!-- Negative Space Core Window within the loop -->
+  <rect x="196" y="162" width="100" height="60" rx="30" fill="#FAF9F5" />
+
+  <!-- Ascending Forecasting Tiers (Predictive Intelligence Bars on lower right) -->
+  <!-- Tier 1: Baseline -->
+  <rect x="236" y="348" width="52" height="52" rx="16" fill="#E8E3D9" />
+  <!-- Tier 2: Mid-Forecasting -->
+  <rect x="300" y="308" width="52" height="92" rx="16" fill="url(#amberGrad)" />
+</svg>
